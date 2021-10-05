@@ -1,35 +1,10 @@
 
 //CRIANDO O MAPA
-let walls = [];
 
-const bloqueio = (player, block) => {
-    let distanceX = (player.style.left + player.style.width/2) - (block.x + block.width/2);
-    let distanceY = (player.style.top + player.style.height/2) - (block.y + block.height/2);
-
-    let sumWidth = (player.style.width + block.width)/2
-    let sumHeigth = (player.style.height + block.height)/2
-
-    if(Math.abs(distanceX) < sumWidth && Math.abs(distanceY) < sumHeigth){
-        let collisionX = sumWidth - Math.abs(distanceX);
-        let collisionY = sumHeigth - Math.abs(distanceY);
-
-            if(collisionX > collisionY){
-                if(distanceY > 0){
-                    player.y += collisionY;
-                }else{
-                    player.y -= collisionY; 
-                }
-            }else{
-                if(distanceX > 0){
-                    player.x += collisionX;
-                }else{player.x -= collisionX}
-            }
-    }
-}
 
 const createMap = () =>{
 
-    const body = document.querySelector('body');
+    const main = document.querySelector('main');
 
     const map = [
         "WWWWWWWWWWWWWWWWWWWWW",
@@ -41,28 +16,13 @@ const createMap = () =>{
         "W WWW WWWWW WWWWW W W",
         "W W   W   W W     W W",
         "W WWWWW W W W WWW W F",
-        "S      W W W W W W WWW",
+        "S     W W W W W W WWW",
         "WWWWW W W W W W W W W",
         "W     W W W   W W W W",
         "W WWWWWWW WWWWW W W W",
         "W       W       W   W",
         "WWWWWWWWWWWWWWWWWWWWW",
     ];
-
-    for(let section in map){
-        for (let div in map[section]){
-            let item = map[section][div];
-            if(item === 'W'){
-                let wall = {
-                    x: 22.5 * div,
-                    y: 33 * section,
-                    width: 22.5,
-                    height: 33
-                };
-                walls.push(wall);
-            }
-        }
-    }
 
 
 
@@ -77,7 +37,7 @@ const createMap = () =>{
                 div.classList.add('W');
             }
             if(map[i][j] === 'S'){
-                div.classList.add('pacman');
+                div.classList.add('start');
             }
             if(map[i][j] === 'F'){
                 div.classList.add('F');
@@ -85,41 +45,107 @@ const createMap = () =>{
             if(map[i][j] === ' '){
                 div.classList.add('route');
             }
+            div.id = 'linha' + i +'coluna' + j;
             section.appendChild(div);
         }
-        body.appendChild(section);
+        main.appendChild(section);
     }
+
+    const playerDiv = document.createElement('div');
+    playerDiv.classList.add('pacman');
+
+    const start = document.querySelector('.start');
+    start.appendChild(playerDiv)
 }
 
-onload = createMap();
+createMap();
+
+
+//CONDIÇÃO DE VITÓRIA E REST
+
+let win = () =>{
+    const main = document.querySelector('main');
+
+    while(main.firstChild){
+        main.removeChild(main.firstChild);
+    }
+
+    const div = document.createElement('div');
+    div.innerText = 'PARABENS, VOCÊ CONSEGUIU!!'
+    div.classList.add('win');
+
+    main.appendChild(div);
+
+    const reset = document.createElement('button');
+    console.log(reset)
+    reset.innerText = 'Play Again';
+    reset.classList.add('reset');
+
+    main.appendChild(reset);
+
+    
+    const resetButton = document.querySelector('.reset')
+    reset.addEventListener('click', resetGame)
+}
+
+let resetGame = () =>{
+    const main = document.querySelector('main');
+
+    while(main.firstChild){
+        main.removeChild(main.firstChild);
+    }
+    createMap();
+}
+
 
 //MOVIMENTO
-const player = document.querySelector('.pacman')
 
-let boxTop = 297;
-let boxLeft = 0;
+let coluna = 0;
+let linha = 9;
 
 document.addEventListener('keydown', (event) => {
     const keyName = event.key;
+    const player = document.querySelector('.pacman')
 
     if(keyName === 'ArrowDown'){
-        boxTop += 33;
+        linha += 1;
+        player.classList.add('down')
     }
     if(keyName === 'ArrowUp'){
-         boxTop -= 33;
+         linha -= 1;
+        player.classList.add('up')
     }
     if(keyName === 'ArrowLeft'){
-         boxLeft -= 22.5;
+         coluna -= 1;
+        player.classList.add('left')
     }
     if(keyName === 'ArrowRight'){
-         boxLeft += 22.5;
+        coluna += 1;
     }
 
-    for(let i in walls){
-        let block = walls[i];
-        bloqueio(player,block);
-    }
 
-    document.getElementsByClassName("pacman").style.top = boxTop + "px";
-    return document.getElementsByClassName("pacman").style.left = boxLeft + "px";
+    let local = 'linha' + linha + 'coluna' + coluna;
+    let nextDiv = document.querySelector('#' + local)
+
+    if(nextDiv.className === 'W'){
+        
+        if(keyName === 'ArrowDown'){
+            linha -= 1;
+        }
+        if(keyName === 'ArrowUp'){
+             linha += 1;
+        }
+        if(keyName === 'ArrowLeft'){
+             coluna += 1;
+             
+        }
+        if(keyName === 'ArrowRight'){
+            coluna -= 1;
+        }
+    }else if(nextDiv.className === 'F'){
+
+        win();
+    }else{
+        nextDiv.appendChild(player);
+    }
   });

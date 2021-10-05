@@ -53,29 +53,63 @@ table {
     
 }
 .pacman{
-    position: absolute;
     background-image: url('./pictures/pacman.gif');
     background-size: cover;
     background-position: center;
-    top: 297px;
-    left: 0;
     animation-name: slideRight;
     animation-duration: 400ms;
 }
 .F{
     background-color: lightblue;
 }
-.route{
+.route, .start{
     background-color: lightpink;
 }
 div{
     width: 22.5px;
     height: 33px;
 }
+.down{
+    animation-name: slideDown;
+}
+.up{
+    animation-name: slideUp;
+}
+.left{
+    animation-name: slideLeft;
+}
+.win{
+    font-size: 50px;
+    color: rgb(212, 119, 137);
+    text-shadow: rgb(71, 69, 69) 10px 10px 10px;
+}
+.reset{
+    padding: 20px;
+    border-radius: 10px;
+    border:none;
+    background-color: rgb(212, 119, 137);
+    margin-top: 150px;
+    color: #fff;
+    font-size: 20px;
+    text-shadow: rgb(153, 151, 151) 3px 3px 3px  ;
+}
 @keyframes slideRight {
     from {margin-left: -33px;}
     to {margin-left: 0;}
     }
-    .slideRight {animation-name: slideRight;}
 
+@keyframes slideLeft {
+    from {margin-right: -33px;}
+    to {margin-right: 0;}
+    }
+@keyframes slideDown {
+    from {margin-top: -33px;}
+    to {margin-top: 0;}
+    }   
+ @keyframes slideUp {
+    from {margin-bottom: -33px;}
+    to {margin-botto: 0;}
+    }   
+    
+    
 

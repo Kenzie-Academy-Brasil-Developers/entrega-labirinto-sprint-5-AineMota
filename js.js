@@ -127,8 +127,10 @@ document.addEventListener('keydown', (event) => {
     let local = 'linha' + linha + 'coluna' + coluna;
     let nextDiv = document.querySelector('#' + local)
 
-    if(nextDiv.className === 'W'){
-        
+    if(nextDiv.className === 'F') {
+        win();
+            
+    }else if(nextDiv.className !== 'route' && nextDiv.className !== 'start'){
         if(keyName === 'ArrowDown'){
             linha -= 1;
         }
@@ -142,9 +144,7 @@ document.addEventListener('keydown', (event) => {
         if(keyName === 'ArrowRight'){
             coluna -= 1;
         }
-    }else if(nextDiv.className === 'F'){
-
-        win();
+    
     }else{
         nextDiv.appendChild(player);
     }
